@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useStore } from '@/store'
 
-export const baseURL = 'http://localhost:8080/campus'
+export const baseURL = 'http://localhost:8080/forum'
 
 const instance = axios.create({
   baseURL
