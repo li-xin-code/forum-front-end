@@ -117,10 +117,12 @@ const init = ref({
   // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
   // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler
   images_upload_handler: async (blobInfo, progress) => {
-    const { path } = await uploadUedit(blobInfo)
-    // success(img)
-    progress()
-    return path
+    try {
+      const { path } = await uploadUedit(blobInfo)
+      return path
+    } catch (e) {
+      console.log(e)
+    }
   },
   paste_preprocess: (pl, o) => {
     // o.content = $stripTags(o.content, "sup,sub");

@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-form ref="formRef" :inline="true" :model="form" :rules="rules">
-      <el-form-item label="新用户名" prop="pass">
+      <el-form-item label="新密码" prop="pass">
         <el-input v-model="form.pass" placeholder="新密码"  show-password/>
       </el-form-item>
-      <el-form-item label="新用户名" prop="rePass">
+      <el-form-item label="确认新密码" prop="rePass">
         <el-input v-model="form.rePass" placeholder="确认新密码" show-password/>
       </el-form-item>
       <el-form-item>

@@ -15,7 +15,7 @@ export function register (data = {
           message: '注册成功',
           duration: 6000
         })
-        router.push('/login')
+        router.push('/')
       } catch (e) {
         console.log(e)
       }
