@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="topic-form" v-if="isLogin">
+    <div class="topic-form" v-if="!isLogin">
       <div class="border">
         <el-input v-model="topic.title" placeholder="Please input title" class="title" />
         <uedit ref="editorRef" :value="topic.content" @input="input" class="edit" />
