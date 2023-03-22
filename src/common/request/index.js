@@ -19,21 +19,16 @@ instance.interceptors.response.use((response) => {
 })
 
 export function getax (url, param, loginRequired = false) {
+  const config = { params: param }
   if (loginRequired) {
     const store = useStore()
     const token = store.getToken()
     if (token === null || token.length === 0) {
       console.log('login required')
     }
-    const config = {
-      headers: {
-        token: token,
-        param: param
-      }
-    }
-    return instance.get(url, config)
+    config.headers = { token }
   }
-  return instance.get(url, param)
+  return instance.get(url, config)
 }
 
 export function postax (url, data, loginRequired = false) {

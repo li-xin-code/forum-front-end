@@ -2,12 +2,12 @@ import { getax, postax, deltax } from '../common/request'
 
 export const getTopicList = async (page) => {
   const { data } = await getax(`/topic/list/${page}`)
-  return data.list
+  return data
 }
 
 export const getOneTopic = async (topicId) => {
-  const { data } = await getax('/topic/' + topicId)
-  return data.topic
+  const { data } = await getax('/topic/detail/' + topicId)
+  return data
 }
 
 export const addTopic = async (form) => {
@@ -15,11 +15,11 @@ export const addTopic = async (form) => {
   return data.topicId
 }
 
-export const topicTotal = async () => {
-  const { data } = await getax('/topic/total')
-  return data.total
-}
-
 export const removeTopic = async (topicId) => {
   await deltax(`/topic/${topicId}`, null, true)
+}
+
+export const relatedMe = async (page = 1) => {
+  const { data } = await getax('/topic/related_me', { pageNum: page }, true)
+  return data
 }

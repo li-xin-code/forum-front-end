@@ -14,7 +14,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import { exist } from '@/api/nameExist.js'
+import { nameAvailable } from '@/api/user.js'
 import { rename } from '@/api/rename.js'
 import { ElMessage } from 'element-plus'
 
@@ -62,13 +62,11 @@ const checkName = (rule, value, callback) => {
   if (form.name === '') {
     return callback(new Error('用户名不为空'))
   }
-  exist(form.name).then((response) => {
-    if (response.data === 1) {
-      callback(new Error('用户名已存在'))
-    } else {
-      callback()
-    }
-  })
+  if (nameAvailable(form.name)) {
+    callback()
+  } else {
+    callback(new Error('不可用'))
+  }
 }
 
 const rules = reactive({

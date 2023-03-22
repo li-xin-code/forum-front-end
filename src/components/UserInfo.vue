@@ -1,9 +1,13 @@
 <template>
   <div>
-    <el-col :span="5" class="key" :offset="1">用户名：</el-col>
-    <el-col :span="6" class="val" :push="1">{{ user.username }}</el-col>
-    <el-col :span="6" class="key" :push="2">UUID：</el-col>
-    <el-col :span="10" class="val" :push="2"> {{ user.uuid }}</el-col>
+    <el-descriptions title="用户信息">
+      <el-descriptions-item label="用户名">{{ userInfo.username }}</el-descriptions-item>
+      <el-descriptions-item label="用户编号">{{ userInfo.userId }}</el-descriptions-item>
+      <el-descriptions-item label="性别">{{ userInfo.gender }}</el-descriptions-item>
+      <el-descriptions-item label="个性签名">{{ userInfo.userSign }}</el-descriptions-item>
+      <el-descriptions-item label="注册时间">{{ userInfo.createTime }}</el-descriptions-item>
+    </el-descriptions>
+
   </div>
 </template>
 
@@ -14,21 +18,30 @@ import { useStore } from '@/store'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 
-const user = reactive({
+const userInfo = reactive({
   username: '',
-  uuid: ''
+  userId: '',
+  gender: '',
+  face: '',
+  userSign: '',
+  createTime: ''
 })
 
 const store = useStore()
 const router = useRouter()
-const userInfo = async () => {
+
+const getInfo = async () => {
   try {
     const { data } = await getUserInfo()
-    user.username = data.user.username
-    user.uuid = data.user.uuid
+    userInfo.username = data.username
+    userInfo.userId = data.userId
+    userInfo.gender = data.gender
+    userInfo.face = data.face
+    userInfo.userSign = data.userSign
+    userInfo.createTime = data.createTime
   } catch (error) {
     const response = error.response.data
-    if (response.status === 401) {
+    if (response.status === 502) {
       store.removeToken()
       ElMessage({
         type: 'error',
@@ -40,11 +53,14 @@ const userInfo = async () => {
   }
 }
 onMounted(async () => {
-  await userInfo()
+  await getInfo()
 })
 
 defineExpose({
-  userInfo
+  getInfo,
+  getFace () {
+    return userInfo.face
+  }
 })
 </script>
 

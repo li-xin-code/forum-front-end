@@ -1,11 +1,11 @@
 <template>
-  <div class="">
+  <div>
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
       <el-menu-item index="1">CampusForum</el-menu-item>
-      <el-menu-item index="2">UserInfo</el-menu-item>
-      <el-menu-item index="3">AddTopic</el-menu-item>
-      <el-menu-item index="4">Login</el-menu-item>
-      <el-menu-item index="5">Register</el-menu-item>
+      <el-menu-item index="2">个人信息</el-menu-item>
+      <el-menu-item index="3">发布话题</el-menu-item>
+      <el-menu-item index="4">登陆</el-menu-item>
+      <el-menu-item index="5">注册</el-menu-item>
     </el-menu>
   </div>
 </template>

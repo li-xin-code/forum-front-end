@@ -29,7 +29,7 @@ export default {
   name: 'LoginForm',
   setup () {
     const form = reactive({
-      username: 'tom',
+      username: 'lixin',
       password: '888888'
     })
     const onSubmit = async () => {

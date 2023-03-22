@@ -24,8 +24,4 @@ import ViewHead from '@/components/Header.vue'
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
-
-// .comment-layout {
-//   width: 90vw;
-// }
 </style>

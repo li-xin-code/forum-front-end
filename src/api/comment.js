@@ -4,7 +4,7 @@ const baseUrl = '/comment'
 
 export const commentList = async (topicId, page = 1) => {
   const { data } = await getax(`${baseUrl}/${topicId}/${page}`)
-  return data.list
+  return data
 }
 
 export const addComment = async (topicId, content) => {
@@ -12,14 +12,9 @@ export const addComment = async (topicId, content) => {
 }
 
 export const addReply = async (topicId, commentId, content) => {
-  await postax(`${baseUrl}/reply`, { topicId, commentId, content }, true)
+  await postax(baseUrl, { topicId, commentId, content }, true)
 }
 
 export const delComment = async (commentId) => {
   await deltax(`${baseUrl}/${commentId}`, {}, true)
-}
-
-export const commentTotal = async (topicId) => {
-  const { data } = await getax(`${baseUrl}/total/${topicId}`)
-  return data.total
 }

@@ -5,7 +5,8 @@ import LoginView from '@/views/LoginView.vue'
 import UserInfoView from '@/views/UserInfoView.vue'
 import AddTopicView from '@/views/AddTopicView.vue'
 import TopicView from '@/views/TopicView.vue'
-import ModifyTopicView from '@/views/ModifyTopicView.vue'
+import ModifyTopicView from '../views/ModifyTopicView.vue'
+import SearchView from '../views/SearchView.vue'
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/topic/modify/:topicId',
     name: 'ModifyTopicView',
     component: ModifyTopicView
+  },
+  {
+    path: '/search/:keyword',
+    name: 'SearchView',
+    component: SearchView
   }
 ]
 

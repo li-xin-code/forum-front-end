@@ -64,14 +64,14 @@
   </div>
   <div id="pagination">
     <el-pagination v-model:currentPage="currentPage" :background="true" :pageSize="6"
-      layout="total, prev, pager, next, jumper" :total="total"
+      layout="total, prev, pager, next, jumper" :total="commentTotal"
       @current-change="handleCurrentChange" :hide-on-single-page="true" />
   </div>
 </template>
 <script setup>
 import Uedit from '@/components/common/Uedit.vue'
 import { getOneTopic, removeTopic } from '@/api/topic.js'
-import { commentList, addComment, addReply, delComment, commentTotal } from '@/api/comment.js'
+import { commentList, addComment, addReply, delComment } from '@/api/comment.js'
 import { onMounted, reactive, ref } from 'vue'
 import { useStore } from '../../store'
 import { useRouter } from 'vue-router'
@@ -84,7 +84,7 @@ const props = defineProps({
     default: ''
   }
 })
-const total = ref(1)
+const commentTotal = ref(1)
 const currentPage = ref(1)
 const commentEditRef = ref(null)
 const replyEditRef = ref(null)
@@ -98,6 +98,7 @@ const topic = reactive({
   content: '',
   author: '',
   authorId: '',
+  face: '',
   createTime: ''
 })
 const currentUserId = store.getUserId()
@@ -164,8 +165,9 @@ const handleCurrentChange = async (val) => {
 }
 onMounted(async () => {
   await getTopicDetail()
-  comments.value = await commentList(props.topicId, currentPage.value)
-  total.value = await commentTotal(props.topicId)
+  const { list, total } = await commentList(props.topicId, currentPage.value)
+  comments.value = list
+  commentTotal.value = total
 })
 
 </script>

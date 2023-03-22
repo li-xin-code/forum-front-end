@@ -13,7 +13,7 @@
       </el-row>
     </div>
     <div v-else>
-      已经登陆，<el-button type="text" @click="logout"> 退出登陆 </el-button>
+      已登陆，<el-button type="text" @click="logout"> 退出登陆 </el-button>
     </div>
   </div>
 </template>
