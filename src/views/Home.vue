@@ -37,6 +37,7 @@
 import { getTopicList } from '@/api/topic.js'
 import { onMounted, ref, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 
 const router = useRouter()
 const topicTotal = ref(100)
@@ -64,14 +65,22 @@ const handleCurrentChange = async (val) => {
 }
 
 const searchBtn = () => {
+  if (keyword.value === '') {
+    ElMessage({
+      type: 'warning',
+      message: '请输入',
+      duration: 2000
+    })
+    return
+  }
   router.push('/search/' + keyword.value)
 }
 </script>
 
 <style>
-#topicList {
+/* #topicList {
   min-height: 70vh;
-}
+} */
 
 #pagination {
   display: flex;
@@ -88,10 +97,11 @@ const searchBtn = () => {
   border-radius: 20px;
 }
 
-.no_border  {
+.no_border {
   border: none !important;
 }
-.no_border > div {
+
+.no_border>div {
   border: none;
   box-shadow: none;
   /* box-shadow: 0 0 0 1px var(--el-input-border-color,var(--el-border-color)) inset; */

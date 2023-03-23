@@ -23,7 +23,6 @@ import LoginForm from '@/components/LoginForm.vue'
 import { computed } from '@vue/reactivity'
 import { onMounted } from 'vue'
 import { useStore } from '../store'
-import { getUserInfo } from '@/api/userInfo'
 
 const store = useStore()
 const isLogin = computed((t = store.getToken()) => t === null || t.length === 0)
@@ -31,6 +30,6 @@ const logout = () => {
   store.remove()
 }
 onMounted(async () => {
-  await getUserInfo()
+
 })
 </script>

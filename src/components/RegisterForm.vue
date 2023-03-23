@@ -18,7 +18,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { register } from '@/api/register.js'
-import { exist } from '@/api/nameExist.js'
+import { nameAvailable } from '@/api/user.js'
 
 const form = reactive({
   username: '',
@@ -47,15 +47,10 @@ const checkName = async (rule, value, callback) => {
   if (form.username === '') {
     return callback(new Error('用户名不为空'))
   }
-  try {
-    const { data } = await exist(form.username)
-    if (data.exist) {
-      callback(new Error('用户名重复'))
-    } else {
-      callback()
-    }
-  } catch (e) {
-    console.log(e)
+  if (nameAvailable(form.username)) {
+    callback()
+  } else {
+    callback(new Error('不可用'))
   }
 }
 const checkPwd = (rule, value, callback) => {

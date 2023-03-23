@@ -87,8 +87,7 @@ const getInfo = async () => {
     userInfo.userSign = data.userSign
   } catch (error) {
     console.log(error)
-    const response = error.response.data
-    if (response.status === 502) {
+    if (error.code === 502) {
       store.removeToken()
       ElMessage({
         type: 'error',

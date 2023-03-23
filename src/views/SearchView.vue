@@ -12,51 +12,104 @@
         </div>
       </div>
     </el-row>
-    <el-tabs type="border-card" :stretch="true" style="margin-top: 20px;">
-      <el-tab-pane label="用户">
-        <TopicList ref="topicTotalComponent" :relatedMe="false" :list="topicList" :total="topicTotal"
-          :turnPage="topicTurnPage" />
+    <el-tabs v-model="tabName" type="border-card" :stretch="true" style="margin-top: 20px;" @tab-click="tabClick">
+      <el-tab-pane label="话题" :name="topicPane">
+        <TopicList ref="topic" :relatedMe="false" :list="topicList" :total="topicTotal"
+          :turnPage="topicTurnPage" :pageSize="topicPageSize"/>
       </el-tab-pane>
-      <el-tab-pane label="话题">话题</el-tab-pane>
+      <el-tab-pane label="用户" :name="userPane">
+        <UserList ref="user" :list="userList" :turnPage="userTurnPage" :total="userTotal"/>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script setup>
 import TopicList from '@/components/topic/TopicList.vue'
-import { searchTopic } from '@/api/search.js'
+import UserList from '@/components/user/UserList.vue'
+import { searchTopic, searchUser } from '@/api/search.js'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const keyword = ref('')
-// const currentPage = ref(1)
+const topicPane = ref('topic')
+const userPane = ref('user')
+const tabName = ref('topic')
 const topicList = ref([])
+const userList = ref([])
 const topicTotal = ref(0)
-const topicTotalComponent = ref(null)
+const userTotal = ref(0)
+const topic = ref(null)
+const user = ref(null)
+const topicPageSize = ref(5)
 
 const topicTurnPage = async (page) => {
-  console.log(page)
   const { list } = await searchTopic({
     keyword: keyword.value,
-    page: page
+    page: page,
+    pageSize: topicPageSize.value
   })
   topicList.value = list
 }
-const searchBtn = async () => {
-  const { list, total } = await searchTopic({
+
+const userTurnPage = async (page) => {
+  const { list } = await searchUser({
     keyword: keyword.value,
-    page: 1
+    page: page,
+    pageSize: topicPageSize.value
   })
   topicList.value = list
-  topicTotal.value = total
-  topicTotalComponent.value.refresh()
 }
+
+const searchBtn = async () => {
+  if (topicPane.value === tabName.value) {
+    const { list, total } = await searchTopic({
+      keyword: keyword.value,
+      page: 1,
+      pageSize: topicPageSize.value
+    })
+    topicList.value = list
+    topicTotal.value = total
+    topic.value.refresh()
+  }
+  if (userPane.value === tabName.value) {
+    const { list, total } = await searchUser({
+      keyword: keyword.value,
+      page: 1
+    })
+    userList.value = list
+    userTotal.value = total
+    user.value.refresh()
+  }
+}
+
+const tabClick = async (pane, ev) => {
+  if (topicPane.value === pane.paneName) {
+    const { list, total } = await searchTopic({
+      keyword: keyword.value,
+      page: 1,
+      pageSize: topicPageSize.value
+    })
+    topicList.value = list
+    topicTotal.value = total
+    topic.value.refresh()
+  }
+  if (userPane.value === pane.paneName) {
+    const { list, total } = await searchUser({
+      keyword: keyword.value,
+      page: 1
+    })
+    userList.value = list
+    userTotal.value = total
+    user.value.refresh()
+  }
+}
+
 onMounted(async () => {
   keyword.value = useRoute().params.keyword
-  // currentPage.value = 1
-  topicTotal.value = 1
   const { list, total } = await searchTopic({
     keyword: keyword.value,
-    page: 1
+    page: 1,
+    pageSize: topicPageSize.value
   })
   topicList.value = list
   topicTotal.value = total

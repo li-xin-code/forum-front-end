@@ -7,7 +7,6 @@
       <el-descriptions-item label="个性签名">{{ userInfo.userSign }}</el-descriptions-item>
       <el-descriptions-item label="注册时间">{{ userInfo.createTime }}</el-descriptions-item>
     </el-descriptions>
-
   </div>
 </template>
 
@@ -40,8 +39,8 @@ const getInfo = async () => {
     userInfo.userSign = data.userSign
     userInfo.createTime = data.createTime
   } catch (error) {
-    const response = error.response.data
-    if (response.status === 502) {
+    console.log(error)
+    if (error.code === 502) {
       store.removeToken()
       ElMessage({
         type: 'error',

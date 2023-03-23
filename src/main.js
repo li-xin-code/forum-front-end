@@ -14,6 +14,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 app.config.globalProperties.$base_url = 'http://localhost:8080/forum'
 app.config.globalProperties.$image_base_url = app.config.globalProperties.$base_url
+
 app.use(pinia)
   .use(router)
   .use(elementPlus)

@@ -20,6 +20,9 @@ export const removeTopic = async (topicId) => {
 }
 
 export const relatedMe = async (page = 1) => {
-  const { data } = await getax('/topic/related_me', { pageNum: page }, true)
+  const { data } = await getax('/topic/related_me', {
+    pageNum: page,
+    pageSize: 7
+  }, true)
   return data
 }
