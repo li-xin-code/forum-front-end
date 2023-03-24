@@ -12,7 +12,7 @@
         </div>
       </div>
     </el-row>
-    <div id="topicList">
+    <div id="topic_list">
       <el-table class="center" :data="topicList" style="width: 80%;" @row-click="rowClick">
         <el-table-column prop='face' label="头像" width="80">
           <template #default="scope">
@@ -20,13 +20,13 @@
           </template>
         </el-table-column>
         <el-table-column prop="title" label="标题" width="auto" />
-        <el-table-column prop="author" label="作者" width="70" />
-        <el-table-column prop="commentTotal" label="评论数" width="70" />
+        <el-table-column prop="author" label="作者" width="120" />
+        <el-table-column prop="commentTotal" label="评论数" align="center" width="70" />
         <el-table-column prop="createTime" label="发布时间" width="200" />
       </el-table>
     </div>
     <div id="pagination" class="center">
-      <el-pagination v-model:currentPage="currentPage" :background="true" :pageSize="10"
+      <el-pagination v-model:currentPage="currentPage" :background="true" :pageSize="topicPageSize"
         layout="total, prev, pager, next, jumper" :total="topicTotal" @current-change="handleCurrentChange"
         :hide-on-single-page="true" />
     </div>
@@ -42,16 +42,18 @@ import { ElMessage } from 'element-plus'
 const router = useRouter()
 const topicTotal = ref(100)
 const currentPage = ref(1)
+const topicPageSize = ref(6)
 const imageBaseUrl = ref('')
 const keyword = ref('')
 const topicList = ref([])
 const { proxy } = getCurrentInstance()
 
 onMounted(async () => {
-  const { list, total } = await getTopicList(currentPage.value)
+  const { list, total, pageSize } = await getTopicList(currentPage.value)
   topicList.value = list
   topicTotal.value = total
   imageBaseUrl.value = proxy.$image_base_url
+  topicPageSize.value = pageSize
 })
 
 const rowClick = (row) => {
@@ -78,9 +80,9 @@ const searchBtn = () => {
 </script>
 
 <style>
-/* #topicList {
-  min-height: 70vh;
-} */
+#topic_list {
+  min-height: 73vh;
+}
 
 #pagination {
   display: flex;

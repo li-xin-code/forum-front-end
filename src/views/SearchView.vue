@@ -28,8 +28,9 @@ import TopicList from '@/components/topic/TopicList.vue'
 import UserList from '@/components/user/UserList.vue'
 import { searchTopic, searchUser } from '@/api/search.js'
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
+const router = useRouter()
 const keyword = ref('')
 const topicPane = ref('topic')
 const userPane = ref('user')
@@ -61,6 +62,7 @@ const userTurnPage = async (page) => {
 }
 
 const searchBtn = async () => {
+  router.push(`/search/${keyword.value}`)
   if (topicPane.value === tabName.value) {
     const { list, total } = await searchTopic({
       keyword: keyword.value,
