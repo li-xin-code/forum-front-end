@@ -12,7 +12,7 @@ export function login (data = {
       const { token, user } = response.data
       const store = useStore()
       store.saveToken(token)
-      store.saveUserId(user.uuid)
+      store.saveUserId(user.userId)
       ElMessage({
         type: 'success',
         message: '登陆成功',

@@ -14,11 +14,12 @@
 </template>
 <script setup>
 import Uedit from '@/components/common/Uedit.vue'
-import { addTopic, getOneTopic } from '@/api/topic.js'
+import { addTopic, modifyTopic } from '@/api/topic.js'
 import { onMounted, reactive, ref } from 'vue'
 import { computed } from '@vue/reactivity'
 import { useStore } from '@/store'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 
 const store = useStore()
 const router = useRouter()
@@ -29,9 +30,14 @@ const topic = reactive({
 })
 
 const props = defineProps({
-  topicId: {
-    type: String,
-    default: '',
+  topicBody: {
+    type: Object,
+    default: () => ({}),
+    require: false
+  },
+  isModify: {
+    type: Boolean,
+    default: false,
     require: false
   }
 })
@@ -43,19 +49,32 @@ const input = (newValue) => {
 }
 const publish = async () => {
   const { title, content } = topic
-  try {
-    const topicId = await addTopic({ title, content })
-    router.push(`/topic/detail/${topicId}`)
-  } catch (e) {
-    console.log(e)
+  const form = { title, content }
+  if (props.isModify) {
+    form.topicId = props.topicBody.topicId
+    if (await modifyTopic(form)) {
+      router.push(`/topic/detail/${props.topicBody.topicId}`)
+    } else {
+      ElMessage({
+        type: 'error',
+        message: '修改失败',
+        duration: 3000
+      })
+    }
+  } else {
+    try {
+      const topicId = await addTopic(form)
+      router.push(`/topic/detail/${topicId}`)
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 
-onMounted(async () => {
-  if (props.topicId.length !== 0) {
-    const detail = await getOneTopic(props.topicId)
-    topic.title = detail.title
-    topic.content = detail.content
+onMounted(() => {
+  if (props.isModify) {
+    topic.title = props.topicBody.title
+    topic.content = props.topicBody.content
   }
 })
 </script>

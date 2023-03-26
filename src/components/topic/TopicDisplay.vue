@@ -5,10 +5,11 @@
         <el-descriptions-item align="left">
           <span style="color: #66b1ff;">话题</span>
         </el-descriptions-item>
-        <el-descriptions-item label="titele" :align="'center'">{{ topic.title }}</el-descriptions-item>
-        <el-descriptions-item label="author" :align="'center'">{{ topic.author }}</el-descriptions-item>
-        <el-descriptions-item label="publish-time" :align="'center'">{{ topic.createTime }}</el-descriptions-item>
-        <el-descriptions-item v-if="currentUserId === topic.authorId" :align="'center'">
+        <el-descriptions-item label="标题" :align="'center'">{{ topic.title }}</el-descriptions-item>
+        <el-descriptions-item label="作者" :align="'center'">{{ topic.author }}</el-descriptions-item>
+        <el-descriptions-item v-if="isModify" label="发布时间" :align="'center'">{{ topic.createTime }}</el-descriptions-item>
+        <el-descriptions-item v-else label="最后更改时间" :align="'center'">{{ topic.modifyTime }}</el-descriptions-item>
+        <el-descriptions-item v-if="isTopicAuthor" :align="'center'">
           <el-button type="text" @click="modify"> 修改 </el-button>
           <el-button type="text" @click="remove"> 删除 </el-button>
         </el-descriptions-item>
@@ -45,7 +46,8 @@
             <el-descriptions-item :align="'center'">{{ topic.createTime }}</el-descriptions-item>
             <el-descriptions-item align="right">
               <el-button type="text" @click="replySwitch(item.commentId)">回复</el-button>
-              <el-button type="text" @click="removeComement(item.commentId)" v-if="currentUserId === item.authorId"> 删除
+              <el-button type="text" @click="removeComement(item.commentId)"
+                v-if="isCommentAuthor(item.authorId)"> 删除
               </el-button>
             </el-descriptions-item>
           </el-descriptions>
@@ -73,11 +75,12 @@ import Uedit from '@/components/common/Uedit.vue'
 import { getOneTopic, removeTopic } from '@/api/topic.js'
 import { commentList, addComment, addReply, delComment } from '@/api/comment.js'
 import { onMounted, reactive, ref } from 'vue'
+import { computed } from '@vue/reactivity'
 import { useStore } from '../../store'
 import { useRouter } from 'vue-router'
 
 const rotuer = useRouter()
-const store = useStore()
+// const store = useStore()
 const props = defineProps({
   topicId: {
     type: String,
@@ -99,16 +102,27 @@ const topic = reactive({
   author: '',
   authorId: '',
   face: '',
-  createTime: ''
+  createTime: '',
+  modifyTime: ''
 })
-const currentUserId = store.getUserId()
+// const currentUserId = store.getUserId()
 
+const isTopicAuthor = computed(() => {
+  return useStore().getUserId() === topic.authorId
+})
+
+const isCommentAuthor = computed(() => (userId) => {
+  return useStore().getUserId() === userId
+})
+
+const isModify = computed(() => {
+  return topic.createTime === topic.modifyTime
+})
 const getTopicDetail = async () => {
-  const detail = await getOneTopic(props.topicId)
-  const list = (arra, arrb) => Object.keys(arra).forEach(key => {
+  const detail = await getOneTopic(props.topicId);
+  ((arra, arrb) => Object.keys(arra).forEach(key => {
     arra[key] = arrb[key] || arra[key]
-  })
-  list(topic, detail)
+  }))(topic, detail)
 }
 const remove = async () => {
   await removeTopic(props.topicId)

@@ -1,4 +1,4 @@
-import { getax, postax, deltax } from '../common/request'
+import { getax, postax, deltax, putax } from '../common/request'
 
 export const getTopicList = async (page) => {
   const { data } = await getax(`/topic/list/${page}`)
@@ -13,6 +13,11 @@ export const getOneTopic = async (topicId) => {
 export const addTopic = async (form) => {
   const { data } = await postax('/topic', form, true)
   return data.topicId
+}
+
+export const modifyTopic = async (form) => {
+  const { code } = await putax('/topic', form, true)
+  return code === 200
 }
 
 export const removeTopic = async (topicId) => {
