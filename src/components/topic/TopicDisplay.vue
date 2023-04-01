@@ -2,7 +2,7 @@
   <div>
     <div class="topic-box edit-box">
       <el-descriptions :column="5" class="center">
-        <el-descriptions-item align="left">
+        <el-descriptions-item :align="'left'">
           <span style="color: #66b1ff;">话题</span>
         </el-descriptions-item>
         <el-descriptions-item label="标题" :align="'center'">{{ topic.title }}</el-descriptions-item>
@@ -37,14 +37,14 @@
       <div v-for="item in comments" :key="item.commentId" style="margin-top: 5px">
         <div class="topic-box edit-box">
           <el-descriptions :column="5" class="center">
-            <el-descriptions-item align="left">
+            <el-descriptions-item :align="'left'">
               <span style="color: #66b1ff;">评论</span>
             </el-descriptions-item>
             <el-descriptions-item label="author" :align="'center'">{{ item.author }}</el-descriptions-item>
             <el-descriptions-item label="reply" v-if="item.replyAuthor" :align="'center'">{{ item.replyAuthor }}
             </el-descriptions-item>
             <el-descriptions-item :align="'center'">{{ topic.createTime }}</el-descriptions-item>
-            <el-descriptions-item align="right">
+            <el-descriptions-item :align="'right'">
               <el-button type="text" @click="replySwitch(item.commentId)">回复</el-button>
               <el-button type="text" @click="removeComement(item.commentId)"
                 v-if="isCommentAuthor(item.authorId)"> 删除
@@ -132,13 +132,8 @@ const modify = () => {
   rotuer.push(`/topic/modify/${props.topicId}`)
 }
 const commentSwitch = () => {
-  const b = topicCommentSwitchFlag.value
-  if (b) {
-    topicCommentSwitchFlag.value = false
-    return
-  }
-  topicCommentSwitchFlag.value = true
-  replySwitchFlag.value = false
+  topicCommentSwitchFlag.value = !topicCommentSwitchFlag.value
+  replySwitchFlag.value = ''
 }
 const replySwitch = (commentId) => {
   replySwitchFlag.value = replySwitchFlag.value === commentId ? '' : commentId
@@ -153,7 +148,7 @@ const replyInput = (newValue) => {
 const comment = async () => {
   try {
     await addComment(props.topicId, commentContent.value)
-    comments.value = await commentList(props.topicId, currentPage.value)
+    await getCommentList()
     topicCommentSwitchFlag.value = false
   } catch (e) {
     console.log(e)
@@ -162,7 +157,7 @@ const comment = async () => {
 const reply = async (replyId) => {
   try {
     await addReply(props.topicId, replyId, replyContent.value)
-    comments.value = await commentList(props.topicId, currentPage.value)
+    await getCommentList()
     replySwitchFlag.value = ''
   } catch (e) {
     console.log(e)
@@ -177,11 +172,14 @@ const handleCurrentChange = async (val) => {
   currentPage.value = val
   comments.value = await commentList(props.topicId, currentPage.value)
 }
-onMounted(async () => {
-  await getTopicDetail()
+const getCommentList = async () => {
   const { list, total } = await commentList(props.topicId, currentPage.value)
   comments.value = list
   commentTotal.value = total
+}
+onMounted(async () => {
+  await getTopicDetail()
+  await getCommentList()
 })
 
 </script>

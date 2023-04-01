@@ -12,7 +12,7 @@
 
 <script setup>
 import { getUserInfo } from '@/api/userInfo'
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, computed } from 'vue'
 import { useStore } from '@/store'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
@@ -28,10 +28,12 @@ const userInfo = reactive({
 
 const store = useStore()
 const router = useRouter()
+const isVisitor = computed((id = props.userId) => id !== '' && store.getUserId() !== id)
 
 const getInfo = async () => {
+  if (isVisitor.value) { }
   try {
-    const { data } = await getUserInfo()
+    const { data } = isVisitor.value ? await getUserInfo(props.userId) : await getUserInfo()
     userInfo.username = data.username
     userInfo.userId = data.userId
     userInfo.gender = data.gender
@@ -54,7 +56,12 @@ const getInfo = async () => {
 onMounted(async () => {
   await getInfo()
 })
-
+const props = defineProps({
+  userId: {
+    type: String,
+    default: ''
+  }
+})
 defineExpose({
   getInfo,
   getFace () {

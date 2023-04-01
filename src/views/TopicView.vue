@@ -9,7 +9,5 @@ import TopicDisplay from '@/components/topic/TopicDisplay.vue'
 
 const topicId = useRoute().params.topicId
 </script>
-
 <style>
-
 </style>

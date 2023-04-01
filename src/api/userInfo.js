@@ -1,5 +1,5 @@
 import { getax } from '@/common/request'
 
-export function getUserInfo () {
-  return getax('/user/info', null, true)
+export function getUserInfo (userId) {
+  return getax('/user/info', { userId }, true)
 }

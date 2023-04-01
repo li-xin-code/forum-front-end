@@ -17,7 +17,3 @@ export const nameAvailable = async (name) => {
   const { code } = await getax('/user/name-available', { name }, true)
   return code === 200
 }
-
-export const isLogin = async () => {
-  getax('', {}, true)
-}

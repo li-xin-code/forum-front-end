@@ -4,12 +4,12 @@
       <el-table class="center" :data="props.list" @row-click="rowClick">
         <el-table-column label="头像" width="80">
           <template #default="scope">
-            <el-avatar :fit="'fill'" :src="imageBaseUrl + scope.row.face" />
+            <Face :value="scope.row.face" :userId="scope.row.authorId" :useClick="true"/>
           </template>
         </el-table-column>
         <el-table-column prop="title" label="标题" width="auto" />
-        <el-table-column prop="author" label="作者" width="70" />
-        <el-table-column prop="commentTotal" label="评论数" width="70" />
+        <el-table-column prop="author" label="作者" width="120" />
+        <el-table-column prop="commentTotal" label="评论数" align="center" width="70" />
         <el-table-column label="参与方式" width="150" v-if="relatedMe">
           <template #default="scope">
             <span>{{ relatedMsg(scope.row.relatedTypeCode) }}</span>
@@ -29,6 +29,7 @@
 <script setup>
 import { onMounted, ref, getCurrentInstance, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import Face from '@/components/common/Face.vue'
 
 const router = useRouter()
 const currentPage = ref(1)

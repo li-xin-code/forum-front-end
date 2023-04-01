@@ -13,7 +13,9 @@
       </div>
     </el-row>
     <div id="topic_list">
-      <el-table class="center" :data="topicList" style="width: 80%;" @row-click="rowClick">
+      <TopicList :list="topicList" :turnPage="turnPage" :total="topicTotal"
+      :pageSize="topicPageSize" :relatedMe="false" :minHeight="500"/>
+      <!-- <el-table class="center" :data="topicList" style="width: 80%;" @row-click="rowClick">
         <el-table-column prop='face' label="头像" width="80">
           <template #default="scope">
             <el-avatar :fit="'fill'" :src="imageBaseUrl + scope.row.face" />
@@ -28,12 +30,13 @@
     <div id="pagination" class="center">
       <el-pagination v-model:currentPage="currentPage" :background="true" :pageSize="topicPageSize"
         layout="total, prev, pager, next, jumper" :total="topicTotal" @current-change="handleCurrentChange"
-        :hide-on-single-page="true" />
+        :hide-on-single-page="true" /> -->
     </div>
   </div>
 </template>
 
 <script setup>
+import TopicList from '@/components/topic/TopicList.vue'
 import { getTopicList } from '@/api/topic.js'
 import { onMounted, ref, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
@@ -56,13 +59,8 @@ onMounted(async () => {
   topicPageSize.value = pageSize
 })
 
-const rowClick = (row) => {
-  router.push(`/topic/detail/${row.topicId}`)
-}
-
-const handleCurrentChange = async (val) => {
-  const { list } = await getTopicList(currentPage.value)
-  currentPage.value = val
+const turnPage = async (page) => {
+  const { list } = await getTopicList(page)
   topicList.value = list
 }
 
@@ -80,9 +78,9 @@ const searchBtn = () => {
 </script>
 
 <style>
-#topic_list {
+/* #topic_list {
   min-height: 73vh;
-}
+} */
 
 #pagination {
   display: flex;

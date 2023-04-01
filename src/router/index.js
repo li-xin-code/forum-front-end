@@ -30,6 +30,11 @@ const routes = [
     component: UserInfoView
   },
   {
+    path: '/user-info/:userId',
+    name: 'UserInfoByUserId',
+    component: UserInfoView
+  },
+  {
     path: '/add-topic',
     name: 'AddTopicView',
     component: AddTopicView
