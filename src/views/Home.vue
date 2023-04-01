@@ -13,24 +13,8 @@
       </div>
     </el-row>
     <div id="topic_list">
-      <TopicList :list="topicList" :turnPage="turnPage" :total="topicTotal"
-      :pageSize="topicPageSize" :relatedMe="false" :minHeight="500"/>
-      <!-- <el-table class="center" :data="topicList" style="width: 80%;" @row-click="rowClick">
-        <el-table-column prop='face' label="头像" width="80">
-          <template #default="scope">
-            <el-avatar :fit="'fill'" :src="imageBaseUrl + scope.row.face" />
-          </template>
-        </el-table-column>
-        <el-table-column prop="title" label="标题" width="auto" />
-        <el-table-column prop="author" label="作者" width="120" />
-        <el-table-column prop="commentTotal" label="评论数" align="center" width="70" />
-        <el-table-column prop="createTime" label="发布时间" width="200" />
-      </el-table>
-    </div>
-    <div id="pagination" class="center">
-      <el-pagination v-model:currentPage="currentPage" :background="true" :pageSize="topicPageSize"
-        layout="total, prev, pager, next, jumper" :total="topicTotal" @current-change="handleCurrentChange"
-        :hide-on-single-page="true" /> -->
+      <TopicList :list="topicList" :turnPage="turnPage" :total="topicTotal" :pageSize="topicPageSize"
+        :relatedMe="false" :minHeight="500"/>
     </div>
   </div>
 </template>
@@ -78,9 +62,10 @@ const searchBtn = () => {
 </script>
 
 <style>
-/* #topic_list {
-  min-height: 73vh;
-} */
+#topic_list {
+  width: 80%;
+  margin: 0 auto;
+}
 
 #pagination {
   display: flex;

@@ -25,8 +25,8 @@ const routes = [
     component: LoginView
   },
   {
-    path: '/user-info',
-    name: 'UserInfo',
+    path: '/me',
+    name: 'MyUserInfo',
     component: UserInfoView
   },
   {

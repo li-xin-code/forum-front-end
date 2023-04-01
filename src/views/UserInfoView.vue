@@ -4,7 +4,7 @@
       <el-container>
         <el-aside width="250px">
           <div style="margin-left: 20px;">
-            <Face :value="face" />
+            <Face :value="userDetailInfo.face" :size="70"/>
           </div>
           <el-col :span="12">
             <el-menu default-active="1" @select="handleSelect">
@@ -18,7 +18,8 @@
         </el-aside>
         <el-main>
           <div id="info" v-show="menuSelected == 1">
-            <user-info ref="info" :userId="userId" />
+            <user-info :info="userDetailInfo"/>
+
           </div>
           <div v-if="!isVisitor">
             <div id="modify" v-if="menuSelected == 2">
@@ -35,12 +36,6 @@
           </div>
         </el-main>
       </el-container>
-      <!-- <el-tabs tab-position="left" style="height: 200px" class="demo-tabs">
-        <el-tab-pane label="User">User</el-tab-pane>
-        <el-tab-pane label="Config">Config</el-tab-pane>
-        <el-tab-pane label="Role">Role</el-tab-pane>
-        <el-tab-pane label="Task">Task</el-tab-pane>
-      </el-tabs> -->
     </div>
     <div v-else>
       未登陆,<el-button type="text" @click="toLogin"> 去登陆 </el-button>
@@ -49,24 +44,49 @@
 </template>
 <script setup>
 import UserInfo from '@/components/UserInfo.vue'
+
 import TopicList from '@/components/topic/TopicList.vue'
 import ResetUserInfo from '@/components/resetuserinfo/ResetUserInfo.vue'
 import EditUserInfo from '@/components/resetuserinfo/EditUserInfo.vue'
 import Face from '@/components/common/Face.vue'
 import { relatedMe } from '@/api/topic.js'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import { computed } from '@vue/reactivity'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from '@/store'
+import { getUserInfo } from '@/api/userInfo'
+
+const userDetailInfo = reactive({
+  username: '',
+  userId: '',
+  gender: '',
+  face: '',
+  userSign: '',
+  createTime: ''
+})
 
 const relatedMeList = ref([])
 const relatedMeTotal = ref(0)
 const menuSelected = ref(1)
 const router = useRouter()
-const userId = useRoute().params.userId
+const userId = ref('')
 const store = useStore()
-const info = ref(null)
-const face = ref(null)
+userId.value = useRoute().params.userId
+
+router.beforeEach(async (to, from, next) => {
+  await setUserInfo(to.params.userId)
+  next()
+})
+
+const setUserInfo = async (id) => {
+  const { data } = await getUserInfo(id)
+  userDetailInfo.userId = data.userId
+  userDetailInfo.username = data.username
+  userDetailInfo.face = data.face
+  userDetailInfo.gender = data.gender
+  userDetailInfo.createTime = data.createTime
+  userDetailInfo.userSign = data.userSign
+}
 
 const turnPage = async (page) => {
   const { list, total } = await relatedMe(page)
@@ -74,25 +94,24 @@ const turnPage = async (page) => {
   relatedMeTotal.value = total
 }
 const isLogin = computed((t = store.getToken()) => t !== null && t.length !== 0)
-const isVisitor = computed(() => userId !== undefined && store.getUserId() !== userId)
+const isVisitor = computed((id = userDetailInfo.userId) => id !== undefined && store.getUserId() !== id)
 
 const toLogin = () => router.push('/login')
 
 const refresh = async () => {
-  await info.value.getInfo()
+  await setUserInfo(userId.value)
 }
+
 const handleSelect = (index) => {
   menuSelected.value = index
 }
 onMounted(async () => {
-  if (isVisitor.value) {
-    console.log('访客')
-  } else if (isLogin.value) {
+  await setUserInfo(userId.value)
+  if (isLogin.value) {
     const { list, total } = await relatedMe()
     relatedMeList.value = list
     relatedMeTotal.value = total
   }
-  await info.value.getInfo()
-  face.value = info.value.getFace()
 })
+
 </script>
