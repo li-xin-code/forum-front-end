@@ -58,11 +58,11 @@ const onSubmit = (formEl) => {
   })
 }
 
-const checkName = (rule, value, callback) => {
+const checkName = async (rule, value, callback) => {
   if (form.name === '') {
     return callback(new Error('用户名不为空'))
   }
-  if (nameAvailable(form.name)) {
+  if (await nameAvailable(form.name)) {
     callback()
   } else {
     callback(new Error('不可用'))

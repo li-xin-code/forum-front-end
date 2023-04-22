@@ -29,7 +29,9 @@
 </template>
 <script setup>
 import { onMounted, ref, getCurrentInstance, computed } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const { proxy } = getCurrentInstance()
 const imageBaseUrl = ref('')
 const currentPage = ref(1)
@@ -38,7 +40,7 @@ const handleCurrentChange = async (val) => {
   props.turnPage(val)
 }
 const cardClick = (userId) => {
-  console.log(userId)
+  router.push(`/user-info/${userId}`)
 }
 const setStyle = computed(() => ({
   '--minHeight': props.minHeight + 'px'

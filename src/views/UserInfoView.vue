@@ -19,7 +19,6 @@
         <el-main>
           <div id="info" v-show="menuSelected == 1">
             <user-info :info="userDetailInfo"/>
-
           </div>
           <div v-if="!isVisitor">
             <div id="modify" v-if="menuSelected == 2">
@@ -74,7 +73,9 @@ const store = useStore()
 userId.value = useRoute().params.userId
 
 router.beforeEach(async (to, from, next) => {
-  await setUserInfo(to.params.userId)
+  if (isLogin.value) {
+    await setUserInfo(to.params.userId)
+  }
   next()
 })
 
@@ -106,8 +107,8 @@ const handleSelect = (index) => {
   menuSelected.value = index
 }
 onMounted(async () => {
-  await setUserInfo(userId.value)
   if (isLogin.value) {
+    await setUserInfo(userId.value)
     const { list, total } = await relatedMe()
     relatedMeList.value = list
     relatedMeTotal.value = total

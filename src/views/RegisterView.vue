@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <el-row justify="center">
-      <h2>Register</h2>
+      <h2>注册</h2>
     </el-row>
     <el-row justify="center">
       <el-col :span="10">

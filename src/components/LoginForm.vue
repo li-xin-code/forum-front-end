@@ -16,7 +16,7 @@
       />
     </el-form-item>
     <el-row justify="center">
-      <el-button type="primary" @click="onSubmit">登陆</el-button>
+      <el-button type="primary" @click="onSubmit" style="width: 100px;">登陆</el-button>
     </el-row>
   </el-form>
 </template>

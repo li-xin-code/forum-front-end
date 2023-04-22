@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="login">
     <div v-if="isLogin">
       <el-row justify="center">
-        <el-col :span="10">
+        <el-col :span="10" style="text-align: center;">
           <h2>登陆</h2>
         </el-col>
       </el-row>

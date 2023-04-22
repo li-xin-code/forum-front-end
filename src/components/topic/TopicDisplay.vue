@@ -35,7 +35,7 @@
     </div>
     <div class="comments">
       <div v-for="item in comments" :key="item.commentId" style="margin-top: 5px">
-        <div class="topic-box edit-box">
+        <div class="edit-box">
           <el-descriptions :column="5" class="center">
             <el-descriptions-item :align="'left'">
               <span style="color: #66b1ff;">评论</span>
@@ -186,11 +186,14 @@ onMounted(async () => {
 
 <style scoped>
 .edit>>>div {
+  /* border: red solid 1px !important; */
   border: none !important;
   padding: 0;
+  /* height: auto; */
+}
+.edit>>>iframe {
   height: auto;
 }
-
 .edit-box {
   padding: 5px;
   border: 1px #CFD3DC solid;

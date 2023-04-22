@@ -153,3 +153,8 @@ watch(
   }
 )
 </script>
+<style>
+/* .tox-tinymce{
+  min-height: 10px !important;
+} */
+</style>
