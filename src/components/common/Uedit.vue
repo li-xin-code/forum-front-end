@@ -153,7 +153,13 @@ watch(
   }
 )
 </script>
-<style>
+<style scoped>
+.editor>>>div {
+  border: none !important;
+}
+editor >>> .tox-statusbar {
+  display: none !important;
+}
 /* .tox-tinymce{
   min-height: 10px !important;
 } */

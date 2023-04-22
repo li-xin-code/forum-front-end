@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="topic-box edit-box">
+    <div class="topic-box content-box">
       <el-descriptions :column="5" class="center">
         <el-descriptions-item :align="'left'">
           <span style="color: #66b1ff;">话题</span>
@@ -14,7 +14,7 @@
           <el-button type="text" @click="remove"> 删除 </el-button>
         </el-descriptions-item>
       </el-descriptions>
-      <uedit :value="topic.content" class="edit" :disabled="true" :plugins="['autoresize']" :toolbar="[]" />
+      <uedit :value="topic.content" class="uedit" :disabled="true" :plugins="['autoresize']" :toolbar="[]" />
     </div>
   </div>
   <div class="comment-box">
@@ -35,7 +35,7 @@
     </div>
     <div class="comments">
       <div v-for="item in comments" :key="item.commentId" style="margin-top: 5px">
-        <div class="edit-box">
+        <div class="content-box">
           <el-descriptions :column="5" class="center">
             <el-descriptions-item :align="'left'">
               <span style="color: #66b1ff;">评论</span>
@@ -51,7 +51,7 @@
               </el-button>
             </el-descriptions-item>
           </el-descriptions>
-          <uedit :value="item.content" class="edit" :disabled="true" :plugins="['autoresize']" :toolbar="[]" />
+          <uedit :value="item.content" class="uedit" :disabled="true" :plugins="['autoresize']" :toolbar="[]" />
         </div>
         <div v-if="replySwitchFlag === item.commentId">
           <uedit ref="replyEditRef" :value="replyContent" @input="replyInput" />
@@ -165,12 +165,12 @@ const reply = async (replyId) => {
 }
 const removeComement = async (commentId) => {
   await delComment(commentId)
-  comments.value = await commentList(props.topicId, currentPage.value)
+  await getCommentList()
 }
 
 const handleCurrentChange = async (val) => {
   currentPage.value = val
-  comments.value = await commentList(props.topicId, currentPage.value)
+  await getCommentList()
 }
 const getCommentList = async () => {
   const { list, total } = await commentList(props.topicId, currentPage.value)
@@ -185,16 +185,16 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.edit>>>div {
-  /* border: red solid 1px !important; */
+.uedit>>>div {
+  border: red solid 1px !important;
   border: none !important;
   padding: 0;
-  /* height: auto; */
-}
-.edit>>>iframe {
   height: auto;
 }
-.edit-box {
+.uedit>>>iframe {
+  height: auto;
+}
+.content-box {
   padding: 5px;
   border: 1px #CFD3DC solid;
 }
