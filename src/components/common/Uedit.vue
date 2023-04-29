@@ -1,6 +1,7 @@
 <template>
   <div class="tinymce-box">
-    <editor v-model="state.contentValue" :init="init" :disabled="disabled" @onClick="onClick" />
+    <Editor ref="editorRef" v-model="state.contentValue"
+    :init="init" :disabled="disabled" @onClick="onClick" />
   </div>
 </template>
 
@@ -56,7 +57,7 @@ import 'tinymce/plugins/template' // 内容模板
 import 'tinymce/plugins/visualblocks' // 显示元素范围
 import 'tinymce/plugins/visualchars' // 显示不可见字符
 import 'tinymce/plugins/wordcount' // 字数统计
-import { reactive, watch, ref, onMounted } from 'vue'
+import { reactive, watch, ref, onMounted, computed } from 'vue'
 import { uploadUedit } from '@/api/upload.js'
 
 const props = defineProps({
@@ -80,8 +81,14 @@ const props = defineProps({
   height: {
     type: Number,
     defult: 300
+  },
+  useHeader: {
+    type: Boolean,
+    default: false
   }
 })
+
+const headerDisplay = computed(() => { return props.useHeader ? '' : 'none' })
 
 const state = reactive({
   contentValue: props.value
@@ -128,6 +135,7 @@ const init = ref({
     // o.content = $stripTags(o.content, "sup,sub");
   }
 })
+const editorRef = ref(null)
 
 const emits = defineEmits(['input', 'onClick'])
 
@@ -137,6 +145,7 @@ const onClick = (e) => {
 
 onMounted(() => {
   tinymce.init({})
+  console.log(editorRef.value.$el)
 })
 
 watch(
@@ -153,14 +162,17 @@ watch(
   }
 )
 </script>
-<style scoped>
-.editor>>>div {
-  border: none !important;
-}
-editor >>> .tox-statusbar {
+<style  scoped>
+::v-deep .tox-statusbar {
   display: none !important;
 }
-/* .tox-tinymce{
-  min-height: 10px !important;
-} */
+::v-deep(.tox-editor-header){
+  display: v-bind('headerDisplay');
+}
+
+::v-deep .tox-tinymce {
+  border: none !important;
+  min-height: 100px !important;
+}
+
 </style>

@@ -26,12 +26,14 @@
       </el-row>
     </div>
     <div v-if="topicCommentSwitchFlag">
-      <uedit ref="commentEditRef" :value="commentContent" @input="commentInput" />
-      <el-row justify="end">
-        <el-col :span="2">
-          <el-button type="primary" @click="comment">发布</el-button>
-        </el-col>
-      </el-row>
+      <div class="edit-comment-box">
+        <uedit ref="commentEditRef" :value="commentContent" @input="commentInput" :height="100"/>
+        <el-row justify="end">
+          <el-col :span="2" style="text-align: right; margin-right: 5px;">
+            <el-button type="primary" @click="comment">发布</el-button>
+          </el-col>
+        </el-row>
+      </div>
     </div>
     <div class="comments">
       <div v-for="item in comments" :key="item.commentId" style="margin-top: 5px">
@@ -54,12 +56,14 @@
           <uedit :value="item.content" class="uedit" :disabled="true" :plugins="['autoresize']" :toolbar="[]" />
         </div>
         <div v-if="replySwitchFlag === item.commentId">
-          <uedit ref="replyEditRef" :value="replyContent" @input="replyInput" />
-          <el-row justify="end">
-            <el-col :span="2">
+          <div class="edit-reply-box">
+            <uedit ref="replyEditRef" :value="replyContent" @input="replyInput" :height="50"/>
+            <el-row justify="end">
+            <el-col :span="2" style="text-align: right; margin-right: 5px;">
               <el-button type="primary" @click="reply(item.commentId)">发布</el-button>
             </el-col>
           </el-row>
+          </div>
         </div>
       </div>
     </div>
@@ -134,10 +138,12 @@ const modify = () => {
 const commentSwitch = () => {
   topicCommentSwitchFlag.value = !topicCommentSwitchFlag.value
   replySwitchFlag.value = ''
+  replyContent.value = ''
 }
 const replySwitch = (commentId) => {
   replySwitchFlag.value = replySwitchFlag.value === commentId ? '' : commentId
   topicCommentSwitchFlag.value = false
+  replyContent.value = ''
 }
 const commentInput = (newValue) => {
   commentContent.value = newValue
@@ -185,20 +191,20 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.uedit>>>div {
-  border: red solid 1px !important;
-  border: none !important;
-  padding: 0;
-  height: auto;
+.edit-reply-box{
+  padding: 5px;
+  border: 1px #CFD3DC solid;
+  margin-top: 5px;
 }
-.uedit>>>iframe {
-  height: auto;
+.edit-comment-box{
+  padding: 5px;
+  border: 1px #CFD3DC solid;
+  margin-top: 5px;
 }
 .content-box {
   padding: 5px;
   border: 1px #CFD3DC solid;
 }
-
 .center {
   text-align: center;
 }
